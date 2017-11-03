@@ -55,8 +55,8 @@ void UnconstrainedEndPoseProblem::Instantiate(UnconstrainedEndPoseProblemInitial
     for (int i = 0; i < NumTasks; i++)
     {
         appendVector(y.map, Tasks[i]->getLieGroupIndices());
-        PhiN += Tasks[i]->Length;
-        JN += Tasks[i]->LengthJ;
+        PhiN += Tasks[i]->Indexing[0]->Length;
+        JN += Tasks[i]->Indexing[0]->LengthJ;
     }
 
     Rho = Eigen::VectorXd::Ones(NumTasks);
@@ -94,9 +94,9 @@ void UnconstrainedEndPoseProblem::preupdate()
     PlanningProblem::preupdate();
     for (TaskMap_ptr task : Tasks)
     {
-        for (int i = 0; i < task->Length; i++)
+        for (int i = 0; i < task->Indexing[0]->Length; i++)
         {
-            S(i + task->Start, i + task->Start) = Rho(task->Id);
+            S(i + task->Indexing[0]->Start, i + task->Indexing[0]->Start) = Rho(task->Indexing[0]->Id);
         }
     }
 }
@@ -119,7 +119,7 @@ void UnconstrainedEndPoseProblem::Update(Eigen::VectorXdRefConst x)
     for (int i = 0; i < NumTasks; i++)
     {
         if (Rho(i) != 0)
-            Tasks[i]->update(x, Phi.data.segment(Tasks[i]->Start, Tasks[i]->Length), J.middleRows(Tasks[i]->StartJ, Tasks[i]->LengthJ));
+            Tasks[i]->update(x, Phi.data.segment(Tasks[i]->Indexing[0]->Start, Tasks[i]->Indexing[0]->Length), J.middleRows(Tasks[i]->Indexing[0]->StartJ, Tasks[i]->Indexing[0]->LengthJ));
     }
     ydiff = Phi - y;
 }
@@ -129,8 +129,8 @@ void UnconstrainedEndPoseProblem::setGoal(const std::string& task_name, Eigen::V
     try
     {
         TaskMap_ptr task = TaskMaps.at(task_name);
-        if (goal.rows() != task->Length) throw_named("Invalid goal dimension " << goal.rows() << " expected " << task->Length);
-        y.data.segment(task->Start, task->Length) = goal;
+        if (goal.rows() != task->Indexing[0]->Length) throw_named("Invalid goal dimension " << goal.rows() << " expected " << task->Indexing[0]->Length);
+        y.data.segment(task->Indexing[0]->Start, task->Indexing[0]->Length) = goal;
     }
     catch (std::out_of_range& e)
     {
@@ -143,7 +143,7 @@ void UnconstrainedEndPoseProblem::setRho(const std::string& task_name, const dou
     try
     {
         TaskMap_ptr task = TaskMaps.at(task_name);
-        Rho(task->Id) = rho;
+        Rho(task->Indexing[0]->Id) = rho;
     }
     catch (std::out_of_range& e)
     {
@@ -156,7 +156,7 @@ Eigen::VectorXd UnconstrainedEndPoseProblem::getGoal(const std::string& task_nam
     try
     {
         TaskMap_ptr task = TaskMaps.at(task_name);
-        return y.data.segment(task->Start, task->Length);
+        return y.data.segment(task->Indexing[0]->Start, task->Indexing[0]->Length);
     }
     catch (std::out_of_range& e)
     {
@@ -169,7 +169,7 @@ double UnconstrainedEndPoseProblem::getRho(const std::string& task_name)
     try
     {
         TaskMap_ptr task = TaskMaps.at(task_name);
-        return Rho(task->Id);
+        return Rho(task->Indexing[0]->Id);
     }
     catch (std::out_of_range& e)
     {
