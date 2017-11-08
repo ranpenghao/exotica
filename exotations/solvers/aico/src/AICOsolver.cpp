@@ -496,16 +496,16 @@ double AICOsolver::getTaskCosts(int t)
         r[t].setZero();
         for (int i = 0; i < prob_->getTasks().size(); i++)
         {
-            prec = prob_->Rho[t](i);
+            prec = prob_->Cost.Rho[t](i);
             if (prec > 0)
             {
-                int start = prob_->getTasks()[i]->StartJ;
-                int len = prob_->getTasks()[i]->LengthJ;
+                int start = prob_->Cost.Indexing[i].StartJ;
+                int len = prob_->Cost.Indexing[i].LengthJ;
                 Jt = prob_->J[t].middleRows(start, len).transpose();
-                C += prec * (prob_->ydiff[t].segment(start, len)).squaredNorm();
+                C += prec * (prob_->Cost.ydiff[t].segment(start, len)).squaredNorm();
                 R[t] += prec * Jt * prob_->J[t].middleRows(start, len);
-                r[t] += prec * Jt * (-prob_->ydiff[t].segment(start, len) + prob_->J[t].middleRows(start, len) * qhat[t]);
-                rhat[t] += prec * (-prob_->ydiff[t].segment(start, len) + prob_->J[t].middleRows(start, len) * qhat[t]).squaredNorm();
+                r[t] += prec * Jt * (-prob_->Cost.ydiff[t].segment(start, len) + prob_->Cost.J[t].middleRows(start, len) * qhat[t]);
+                rhat[t] += prec * (-prob_->Cost.ydiff[t].segment(start, len) + prob_->Cost.J[t].middleRows(start, len) * qhat[t]).squaredNorm();
             }
         }
     }
@@ -519,16 +519,16 @@ double AICOsolver::getTaskCosts(int t)
         r[t].setZero();
         for (int i = 0; i < prob_->getTasks().size(); i++)
         {
-            prec = prob_->Rho[t](i);
+            prec = prob_->Cost.Rho[t](i);
             if (prec > 0)
             {
-                int start = prob_->getTasks()[i]->StartJ;
-                int len = prob_->getTasks()[i]->LengthJ;
-                Jt = prob_->J[t].middleRows(start, len).transpose();
-                C += prec * (prob_->ydiff[t].segment(start, len)).squaredNorm();
-                R[t].topLeftCorner(n2, n2) += prec * Jt * prob_->J[t].middleRows(start, len);
-                r[t].head(n2) += prec * Jt * (-prob_->ydiff[t].segment(start, len) + prob_->J[t].middleRows(start, len) * qhat[t]);
-                rhat[t] += prec * (-prob_->ydiff[t].segment(start, len) + prob_->J[t].middleRows(start, len) * qhat[t]).squaredNorm();
+                int start = prob_->Cost.Indexing[i].StartJ;
+                int len = prob_->Cost.Indexing[i].LengthJ;
+                Jt = prob_->Cost.J[t].middleRows(start, len).transpose();
+                C += prec * (prob_->Cost.ydiff[t].segment(start, len)).squaredNorm();
+                R[t].topLeftCorner(n2, n2) += prec * Jt * prob_->Cost.J[t].middleRows(start, len);
+                r[t].head(n2) += prec * Jt * (-prob_->Cost.ydiff[t].segment(start, len) + prob_->Cost.J[t].middleRows(start, len) * qhat[t]);
+                rhat[t] += prec * (-prob_->Cost.ydiff[t].segment(start, len) + prob_->Cost.J[t].middleRows(start, len) * qhat[t]).squaredNorm();
             }
         }
     }
@@ -668,12 +668,12 @@ double AICOsolver::evaluateTrajectory(const std::vector<Eigen::VectorXd>& x,
         for (int i = 0; i < prob_->NumTasks; i++)
         {
             // Position cost
-            double prec = prob_->Rho[t](i);
+            double prec = prob_->Cost.Rho[t](i);
             if (prec > 0)
             {
-                int start = prob_->getTasks()[i]->StartJ;
-                int len = prob_->getTasks()[i]->LengthJ;
-                costTask(t, i) = prec * (prob_->ydiff[t].segment(start, len)).squaredNorm();
+                int start = prob_->Cost.Indexing[i].StartJ;
+                int len = prob_->Cost.Indexing[i].LengthJ;
+                costTask(t, i) = prec * (prob_->Cost.ydiff[t].segment(start, len)).squaredNorm();
                 ret += costTask(t, i);
             }
         }

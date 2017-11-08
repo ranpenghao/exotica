@@ -42,6 +42,23 @@
 
 namespace exotica
 {
+class TimeIndexedTask : public Task
+{
+public:
+    TimeIndexedTask();
+    virtual void initialize(const std::vector<exotica::Initializer>& inits, PlanningProblem_ptr prob, TaskSpaceVector& phi);
+    void updateS();
+    void update(const TaskSpaceVector& Phi, Eigen::MatrixXdRefConst J, int t);
+
+    std::vector<Eigen::VectorXd> Rho;
+    std::vector<TaskSpaceVector> y;
+    std::vector<Eigen::VectorXd> ydiff;
+    std::vector<TaskSpaceVector> Phi;
+    std::vector<Eigen::MatrixXd> J;
+    std::vector<Eigen::MatrixXd> S;
+    int T;
+};
+
 /**
    * \brief Unconstrained time-indexed problem.
    */
@@ -64,6 +81,8 @@ public:
     double getScalarCost(int t);
     Eigen::VectorXd getScalarJacobian(int t);
 
+    TimeIndexedTask Cost;
+
     int T;          //!< Number of time steps
     double tau;     //!< Time step duration
     double Q_rate;  //!< System transition error covariance multipler (per unit time) (constant throughout the trajectory)
@@ -73,12 +92,8 @@ public:
     Eigen::MatrixXd H;
     Eigen::MatrixXd Q;
 
-    std::vector<Eigen::VectorXd> Rho;
-    std::vector<TaskSpaceVector> y;
     std::vector<TaskSpaceVector> Phi;
-    std::vector<Eigen::VectorXd> ydiff;
     std::vector<Eigen::MatrixXd> J;
-    std::vector<Eigen::MatrixXd> S;
 
     int PhiN;
     int JN;
