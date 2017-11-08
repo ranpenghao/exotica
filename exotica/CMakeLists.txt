@@ -90,6 +90,7 @@ add_library(${PROJECT_NAME}
   src/Tools/Printable.cpp
   src/Tools/Conversions.cpp
   src/Loaders/XMLLoader.cpp
+  src/Tasks.cpp
   src/Problems/UnconstrainedTimeIndexedProblem.cpp
   src/Problems/UnconstrainedEndPoseProblem.cpp
   src/Problems/SamplingProblem.cpp
