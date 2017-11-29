@@ -1,7 +1,7 @@
 /*
- *      Author: Michael Camilleri
+ *      Author: Vladimir Ivan
  *
- * Copyright (c) 2016, University Of Edinburgh
+ * Copyright (c) 2017, University Of Edinburgh
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,22 +30,50 @@
  *
  */
 
-#ifndef EXOTICA_H
-#define EXOTICA_H
-
-//!< Core Library
-#include <exotica/Loaders/XMLLoader.h>
-#include <exotica/MotionSolver.h>
+#ifndef BOUNDEDENDPOSEPROBLEM_H_
+#define BOUNDEDENDPOSEPROBLEM_H_
 #include <exotica/PlanningProblem.h>
-#include <exotica/Problems/SamplingProblem.h>
-#include <exotica/Problems/UnconstrainedEndPoseProblem.h>
-#include <exotica/Problems/UnconstrainedTimeIndexedProblem.h>
-#include <exotica/Problems/EndPoseProblem.h>
-#include <exotica/Problems/TimeIndexedProblem.h>
-#include <exotica/Problems/BoundedEndPoseProblem.h>
-#include <exotica/Problems/BoundedTimeIndexedProblem.h>
-#include <exotica/Setup.h>
-#include <exotica/Tools.h>
-#include <exotica/Version.h>
+#include <exotica/BoundedEndPoseProblemInitializer.h>
+#include <exotica/Tasks.h>
 
-#endif  // EXOTICA_H
+namespace exotica
+{
+/**
+    * Bound constrained end-pose problem implementation
+    */
+class BoundedEndPoseProblem : public PlanningProblem, public Instantiable<BoundedEndPoseProblemInitializer>
+{
+public:
+    BoundedEndPoseProblem();
+    virtual ~BoundedEndPoseProblem();
+
+    virtual void Instantiate(BoundedEndPoseProblemInitializer& init);
+    void Update(Eigen::VectorXdRefConst x);
+
+    void setGoal(const std::string& task_name, Eigen::VectorXdRefConst goal);
+    void setRho(const std::string& task_name, const double rho);
+    Eigen::VectorXd getGoal(const std::string& task_name);
+    double getRho(const std::string& task_name);
+    virtual void preupdate();
+    std::vector<double>& getBounds();
+
+    double getScalarCost();
+    Eigen::VectorXd getScalarJacobian();
+
+    EndPoseTask Cost;
+
+    Eigen::MatrixXd W;
+    TaskSpaceVector Phi;
+    Eigen::MatrixXd J;
+
+    int PhiN;
+    int JN;
+    int NumTasks;
+protected:
+    void initTaskTerms(const std::vector<exotica::Initializer>& inits);
+    std::vector<double> bounds_;
+};
+typedef std::shared_ptr<exotica::BoundedEndPoseProblem> BoundedEndPoseProblem_ptr;
+}
+
+#endif
