@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Task Maps &mdash; EXOTica 5.0-beta1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="EXOTica 5.0-beta1 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> EXOTica
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                5.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Initialisation.html">Initialisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Initializers.html">Initializers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="XML.html">XML Initialisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="XML-Parsing.html">XML Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Manual-Initialisation.html">Manual Initialisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Common-Initialisation-Step.html">Common Initialisation Step</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setting-up-ROSlaunch.html">Setting up ROSlaunch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Using-EXOTica.html">Using EXOTica</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Python-API.html">Python Bindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Code-Formatting.html">Code Formatting</a></li>
+<li class="toctree-l1"><a class="reference external" href="./doxygen_cpp/index.html#http://">Doxygen C++</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">EXOTica</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Task Maps</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="task-maps">
+<h1>Task Maps<a class="headerlink" href="#task-maps" title="Permalink to this headline">¶</a></h1>
+<p>Task maps form the basis of all Problems in EXOTica; they provide a mapping from configuration space to task space. A problem can contain one or many task maps. For example, if the problem requires the effector to reach a goal position with no concern for orientation we might use the end-effector position task map: <cite>EffPosition</cite>, which informs EXOTIca that this is what you require. Whereas if we are only concerned with orientation, we would use the ‘EffOrientation’ map. If we care about both position and orientation we can send BOTH the ‘EffPosition’ AND the ‘EffOrientation’ task maps to the problem or we can use the ‘EffFrame’ task map, which contains both positional and orientation mapping.</p>
+<p>The ability to specify multiple task maps enables a wide range of customization for each problem. As well as being able to specify what frame and joint is of interest, we can add collision detection arguments, joint limit constraints or centre of mass location among others individually or collectively to problems.</p>
+<p>In this tutorial we explain each of the task maps and detail the input arguments needed to instantiate the task maps.</p>
+<div class="section" id="initialising-task-maps">
+<h2>Initialising task maps<a class="headerlink" href="#initialising-task-maps" title="Permalink to this headline">¶</a></h2>
+<p>CoM: Specify the CoM for a link
+Initialisation:</p>
+<div class="code cpp highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Name_</span><span class="p">,</span> <span class="nb">bool</span> <span class="n">Debug_</span> <span class="o">=</span>  <span class="n">false</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span> <span class="n">EndEffector_</span> <span class="o">=</span>  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span><span class="p">(),</span> <span class="nb">bool</span> <span class="n">EnableZ_</span> <span class="o">=</span>  <span class="n">true</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Distance: Returns the distance between two frames, either an end effector frame or a point frame.</p>
+<p>Initialisation:</p>
+<div class="code cpp highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Name_</span><span class="p">,</span> <span class="nb">bool</span> <span class="n">Debug_</span> <span class="o">=</span>  <span class="n">false</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span> <span class="n">EndEffector_</span> <span class="o">=</span>  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>EffOrientation: specifies an end effector orientation in task space</p>
+<p>Initialisation:</p>
+<div class="code cpp highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Name_</span><span class="p">,</span> <span class="nb">bool</span> <span class="n">Debug_</span> <span class="o">=</span>  <span class="n">false</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span> <span class="n">EndEffector_</span> <span class="o">=</span>  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span>       <span class="n">Type_</span> <span class="o">=</span>  <span class="s2">&quot;RPY&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>EffPosition: specifies an end effector position in task space</p>
+<p>Initialisation:</p>
+<div class="code cpp highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Name_</span><span class="p">,</span> <span class="nb">bool</span> <span class="n">Debug_</span> <span class="o">=</span>  <span class="n">false</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span> <span class="n">EndEffector_</span> <span class="o">=</span>  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>EffFrame: specifies an end effector pose in task space</p>
+<p>Initialisation:</p>
+<div class="code cpp highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Name_</span><span class="p">,</span> <span class="nb">bool</span> <span class="n">Debug_</span> <span class="o">=</span>  <span class="n">false</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span> <span class="n">EndEffector_</span> <span class="o">=</span>  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Type_</span> <span class="o">=</span>  <span class="s2">&quot;RPY&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>IMesh: See <a class="reference external" href="http://homepages.inf.ed.ac.uk/svijayak/publications/ivan-IJRR2013.pdf">http://homepages.inf.ed.ac.uk/svijayak/publications/ivan-IJRR2013.pdf</a> for details about iMesh</p>
+<p>Initialisation:</p>
+<div class="code cpp highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Name_</span><span class="p">,</span> <span class="nb">bool</span> <span class="n">Debug_</span> <span class="o">=</span>  <span class="n">false</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span> <span class="n">EndEffector_</span> <span class="o">=</span>  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">ReferenceFrame_</span> <span class="o">=</span>  <span class="s2">&quot;/world&quot;</span><span class="p">,</span> <span class="n">Eigen</span><span class="p">::</span><span class="n">VectorXd</span> <span class="n">Weights_</span> <span class="o">=</span>  <span class="n">Eigen</span><span class="p">::</span><span class="n">VectorXd</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Identity: the position of a joint. Useful if you want to avoid a certain position.</p>
+<p>Initialisation:</p>
+<div class="code cpp highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Name_</span><span class="p">,</span> <span class="nb">bool</span> <span class="n">Debug_</span> <span class="o">=</span>  <span class="n">false</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span> <span class="n">EndEffector_</span> <span class="o">=</span>  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">Eigen</span><span class="p">::</span><span class="n">VectorXd</span> <span class="n">JointRef_</span><span class="o">=</span><span class="p">{},</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="nb">int</span><span class="o">&gt;</span> <span class="n">JointMap_</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+<p>JointLimit: map to keep joints away from limits. Use options to set penalties for nearing joint limits</p>
+<p>Initialisation:</p>
+<div class="code cpp highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Name_</span><span class="p">,</span> <span class="nb">bool</span> <span class="n">Debug_</span> <span class="o">=</span>  <span class="n">false</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span> <span class="n">EndEffector_</span> <span class="o">=</span>  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">double</span> <span class="n">SafePercentage_</span> <span class="o">=</span>  <span class="mf">0.0</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">RobotDescription_</span> <span class="o">=</span>  <span class="s2">&quot;robot_description&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Sphere: Initiates a sphere object in relation to a named link with an offset - acts as a primitive for collision SphereCollision</p>
+<p>Initialisation:</p>
+<div class="code cpp highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Link_</span><span class="p">,</span> <span class="n">double</span> <span class="n">Radius_</span><span class="p">,</span> <span class="n">Eigen</span><span class="p">::</span><span class="n">VectorXd</span> <span class="n">LinkOffset_</span> <span class="o">=</span>  <span class="n">Eigen</span><span class="p">::</span><span class="n">IdentityTransform</span><span class="p">(),</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Base_</span> <span class="o">=</span>  <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">Eigen</span><span class="p">::</span><span class="n">VectorXd</span> <span class="n">BaseOffset_</span> <span class="o">=</span>  <span class="n">Eigen</span><span class="p">::</span><span class="n">IdentityTransform</span><span class="p">(),</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Group_</span> <span class="o">=</span>  <span class="s2">&quot;default&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>SphereCollision: Used in collision detection. Groups of spheres (seen in previous bullet point) are attached to the robot and environment. Spheres within the same group will not detect collisions within the same group, but collisions between</p>
+<p>Initialisation:</p>
+<div class="code cpp highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">Name_</span><span class="p">,</span> <span class="n">double</span> <span class="n">Precision_</span><span class="p">,</span> <span class="nb">bool</span> <span class="n">Debug_</span> <span class="o">=</span>  <span class="n">false</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span> <span class="n">EndEffector_</span> <span class="o">=</span>  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">exotica</span><span class="p">::</span><span class="n">Initializer</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">ReferenceFrame_</span> <span class="o">=</span>  <span class="s2">&quot;/world&quot;</span><span class="p">,</span> <span class="n">double</span> <span class="n">Alpha_</span> <span class="o">=</span>  <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Vladimir Ivan, Yiming Yang, Wolfgang Merkt, Michael Camilleri, Sethu Vijayakumar - and contributors.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'5.0-beta1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
